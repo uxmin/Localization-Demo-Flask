@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "components/header.html.j2" %}
+    <title>Artipen Demo</title>
+    <meta name="description" content="A demo for Artipen application">
+    <meta name="keywords" content="artipen, demo, application">
+  </head>
+  <body>
+    <div class="h-screen font-thin tracking-tighter bg-orange-400">
+      <form class="flex flex-col items-center justify-center h-full gap-2"
+            action="{{ url_for("auth.login") }}"
+            method="post">
+        <p class="pb-4 text-5xl text-white">Artipen Demo</p>
+        <input class="p-2 rounded outline-none w-96"
+               id="user_id"
+               name="user_id"
+               type="text"
+               placeholder="ID" />
+        <input class="p-2 rounded outline-none w-96"
+               id="password"
+               name="password"
+               type="password"
+               placeholder="Password" />
+        <div class="pt-4"></div>
+        <button class="p-4 text-white duration-300 border border-white rounded-full aspect-square hover:border-amber-200 hover:text-amber-200"
+                type="submit">Login</button>
+      </form>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul id="messages">
+            {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    </div>
+    <script>
+      window.onload = function () {
+        var messages = document.getElementById("messages");
+        if (messages) {
+          alert(messages.innerText);
+        }
+      };
+    </script>
+  </body>
+</html>

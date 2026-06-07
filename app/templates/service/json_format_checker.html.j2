@@ -1,0 +1,85 @@
+{% extends "service/base.html.j2" %}
+{% block notice %}
+  <li>파일 크기에 따라 검사 시간이 길어질 수 있으니, 버튼 클릭 후 잠시 여유를 가지고 기다려 주세요.</li>
+{% endblock notice %}
+{% block subContent %}
+  <div class="flex-1 space-y-6" name="workspace">
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">1</h1>
+        <h2 class="font-light">검사가 필요한 압축 파일을 업로드하세요.</h2>
+        <p class="text-sm text-sky-800">현재는 zip 파일만 지원됩니다.</p>
+      </div>
+      <div class="mt-6">
+        <input type="file"
+               name="zip_file"
+               accept=".zip"
+               class="w-full rounded bg-stone-100 file:mr-3 file:border-none file:bg-sky-500 file:px-2 file:py-1 file:text-white file:duration-300 hover:file:bg-sky-400" />
+      </div>
+    </section>
+    <section name="action">
+      <button id="chkbtn"
+              class="px-4 py-2 text-white duration-300 bg-orange-400 rounded-lg hover:bg-orange-500">Submit</button>
+    </section>
+  </div>
+  <div class="flex-1" name="pannel">
+    <section class="px-6 pb-10 h-1/2">
+      <ul class="flex flex-wrap font-light tracking-tighter border-b">
+        <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg border-t-sky-500"
+            data-target="result">
+          Result
+          <span class="text-xs text-stone-500">분석 결과를 제공합니다.</span>
+        </li>
+        <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg cursor-pointer hover:border-t-sky-200"
+            data-target="log">
+          Fail List
+          <span class="text-xs text-stone-500">통과되지 못한 파일 리스트를 조회합니다.</span>
+        </li>
+      </ul>
+      <div name="result"
+           class="px-6 py-10 rounded-bl-lg rounded-br-lg shadow bg-stone-100">
+        <table class="w-full table-auto">
+          <thead>
+            <tr class="bg-stone-200">
+              <th class="px-2 font-normal">Type</th>
+              <th class="px-2 font-normal">Item</th>
+              <th class="px-2 font-normal">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="px-2 text-center" rowspan="2">File Count</td>
+              <td class="px-2">Total</td>
+              <td class="px-2 text-right" id="totalCnt">0</td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2">JSON</td>
+              <td class="px-2 text-right" id="jsonCnt">0</td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 text-center" rowspan="2">Validation</td>
+              <td class="px-2">Success</td>
+              <td class="px-2 text-right" id="successCnt">0</td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2">Fail</td>
+              <td class="px-2 text-right" id="failCnt">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div name="log"
+           class="p-6 rounded-bl-lg rounded-br-lg shadow bg-stone-100"
+           hidden>
+        <textarea id="failList"
+                  class="w-full p-4 text-sm resize-none bg-stone-50"
+                  disabled
+                  rows="10"></textarea>
+      </div>
+    </section>
+  </div>
+  {% set js_file_name = current_service.replace('-', '_') %}
+  <script type="module"
+          src="{{ url_for('static', filename='js/' + js_file_name + '.js') }}"></script>
+{% endblock subContent %}

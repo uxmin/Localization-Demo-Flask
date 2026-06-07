@@ -1,0 +1,46 @@
+{% extends "service/base.html.j2" %}
+{% block notice %}
+{% endblock notice %}
+{% block subContent %}
+  <div class="flex-1 space-y-6" name="workspace">
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">1</h1>
+        <h2 class="font-light">작업이 필요한 압축 파일을 업로드하세요.</h2>
+        <p class="text-sm text-sky-800">현재는 zip 파일만 지원됩니다.</p>
+      </div>
+      <div class="mt-6">
+        <input type="file"
+               name="zip_file"
+               accept=".zip"
+               class="w-full rounded bg-stone-100 file:mr-3 file:border-none file:bg-sky-500 file:px-2 file:py-1 file:text-white file:duration-300 hover:file:bg-sky-400" />
+      </div>
+    </section>
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card"
+             aria-label="2">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">2</h1>
+        <h2 class="font-light">업로드한 압축 파일에서 제거할 키를 선택해주세요.</h2>
+        <p class="text-sm text-sky-800"></p>
+      </div>
+      <div class="mt-6">
+        <select class="w-full px-2 py-1 rounded outline-none bg-stone-100">
+          <option hidden>선택</option>
+          <option value="original">Original</option>
+          <option value="localized">Localized</option>
+          <option value="suggested">Suggested</option>
+        </select>
+      </div>
+    </section>
+    <section name="action">
+      <button id="dwnbtn"
+              class="px-4 py-2 text-white duration-300 bg-orange-400 rounded-lg hover:bg-orange-500">Download</button>
+    </section>
+  </div>
+  <div class="flex-1" name="pannel"></div>
+  {% set js_file_name = current_service.replace('-', '_') %}
+  <script type="module"
+          src="{{ url_for('static', filename='js/' + js_file_name + '.js') }}"></script>
+{% endblock subContent %}

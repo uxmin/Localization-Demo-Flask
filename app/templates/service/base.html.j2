@@ -1,0 +1,27 @@
+{% extends "base.html.j2" %}
+{% block content %}
+  <section class="flex flex-col p-10">
+    <header>
+      {% set filtered_services = services|selectattr('action', 'equalto', current_service)|list %}
+      {% if filtered_services %}
+        {% set item = filtered_services[0] %}
+        <div>
+          <h1 class="text-2xl font-medium tracking-tighter text-sky-800">{{ item.name }}</h1>
+          <p class="mt-1 font-extralight">{{ item.description }}</p>
+        </div>
+        <div class="mt-4 text-sm">
+          <label class="font-normal text-orange-600 bg-orange-100">유의사항</label>
+          <ul class="list-decimal list-inside">
+            <li>이 작업은 메모리 상에서만 실행되며, 업로드된 파일과 작업 내용은 저장되지 않습니다.</li>
+            {% block notice %}
+            {% endblock notice %}
+          </ul>
+        </div>
+      {% endif %}
+    </header>
+    <div class="flex flex-row min-h-full gap-4 mt-10">
+      {% block subContent %}
+      {% endblock subContent %}
+    </div>
+  </section>
+{% endblock content %}

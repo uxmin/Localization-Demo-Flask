@@ -1,0 +1,98 @@
+{% extends "service/base.html.j2" %}
+{% block notice %}
+  <li>모델 실행 시, 입력 및 출력 길이에 따라 API 사용 요금이 과다 청구될 수 있습니다. 반드시 테스트가 필요한 경우에만 실행하시기 바랍니다.</li>
+  <li>
+    자세한 요금은
+    <a class="text-sky-600"
+       href="https://platform.openai.com/docs/pricing"
+       target="_blank"
+       rel="noopener noreferrer">OpenAI 가격 안내</a> 및
+    <a class="text-sky-600"
+       href="https://ai.google.dev/gemini-api/docs/pricing?hl=ko"
+       target="_blank"
+       rel="noopener noreferrer">Google Gemini 가격 안내</a>를 참고해주세요.
+  </li>
+{% endblock notice %}
+{% block subContent %}
+  <div class="flex-1 space-y-6" name="workspace">
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">1</h1>
+        <h2 class="font-light">테스트할 모델을 선택해주세요</h2>
+        <p class="text-sm text-sky-800">현재는 일부 GPT 및 Gemini 모델만 지원됩니다.</p>
+      </div>
+      <div class="mt-6">
+        <select class="w-full px-2 py-1 rounded outline-none bg-stone-100">
+          <option hidden>선택</option>
+        </select>
+      </div>
+    </section>
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">2</h1>
+        <h2 class="font-light">API Key를 입력하세요.</h2>
+        <p class="text-sm text-sky-800">모델 실행에 필요한 개인 API Key를 입력해주세요.</p>
+        <p class="text-sm text-sky-800">입력된 키는 저장되지 않으며, 실행에만 사용됩니다.</p>
+      </div>
+      <div class="mt-6">
+        <input id="apiKeyInput"
+               class="w-full p-2 text-sm duration-300 border rounded resize-none focus:outline-none focus:ring-1 focus:ring-sky-400"
+               type="password">
+      </input>
+    </div>
+  </section>
+  <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+           name="card">
+    <div>
+      <h1 class="text-2xl font-medium opacity-50">3</h1>
+      <h2 class="font-light">시스템 프롬프트를 입력하세요. (선택사항)</h2>
+      <p class="text-sm text-sky-800">모델의 역할이나 말투 등을 지정할 수 있습니다. 입력하지 않으면 기본 설정으로 실행됩니다.</p>
+    </div>
+    <div class="mt-6">
+      <textarea id="systemPromptInput"
+                class="w-full p-4 text-sm duration-300 border rounded resize-none focus:outline-none focus:ring-1 focus:ring-sky-400"
+                rows="10"></textarea>
+    </div>
+  </section>
+  <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+           name="card">
+    <div>
+      <h1 class="text-2xl font-medium opacity-50">3</h1>
+      <h2 class="font-light">사용자 프롬프트를 입력하세요.</h2>
+      <p class="text-sm text-sky-800">모델에 질문하거나 요청할 내용을 작성해주세요.</p>
+    </div>
+    <div class="mt-6">
+      <textarea id="userPromptInput"
+                class="w-full p-4 text-sm duration-300 border rounded resize-none focus:outline-none focus:ring-1 focus:ring-sky-400"
+                rows="5"></textarea>
+    </div>
+  </section>
+  <section name="action">
+    <button id="resultBtn"
+            class="px-4 py-2 text-white duration-300 bg-orange-400 rounded-lg hover:bg-orange-500">Submit</button>
+  </section>
+</div>
+<div class="flex-1" name="pannel">
+  <section class="px-6 pb-10">
+    <ul class="flex flex-wrap font-light tracking-tighter border-b">
+      <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg border-t-sky-500"
+          data-target="result">
+        Result
+        <span class="text-xs text-stone-500">선택한 모델의 응답이 아래에 표시됩니다. 프롬프트 결과를 확인하고, 필요 시 다시 수정해보세요.</span>
+      </li>
+    </ul>
+    <div name="result"
+         class="px-6 py-10 rounded-bl-lg rounded-br-lg shadow bg-stone-100 max-h-[75vh] overflow-y-auto">
+      <textarea id="agentResponse"
+                class="w-full p-4 text-sm resize-none bg-stone-50"
+                disabled
+                rows="40"></textarea>
+    </div>
+  </section>
+</div>
+{% set js_file_name = current_service.replace('-', '_') %}
+<script type="module"
+        src="{{ url_for('static', filename='js/' + js_file_name + '.js') }}"></script>
+{% endblock subContent %}

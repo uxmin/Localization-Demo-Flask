@@ -1,0 +1,48 @@
+<aside class="flex flex-col gap-2 p-4 bg-orange-400 w-80">
+  <p class="p-4 text-3xl tracking-tighter text-center text-white cursor-pointer"
+     onclick="window.location.href=`/demo/home`">Artipen Demo</p>
+  <ul id="menu"
+      class="flex flex-col flex-1 gap-1 font-light cursor-pointer">
+    <li class="px-2 py-1 text-orange-400 duration-300 rounded bg-orange-50"
+        onclick="window.location.href=`/demo/home`"
+        data-value="home">Home</li>
+    {% for service in services %}
+      <li class="px-2 py-1 text-white duration-300 rounded hover:bg-orange-500"
+          onclick="navigateToService('{{ service.action }}')"
+          data-value="{{ service.action }}">{{ service.name }}</li>
+    {% endfor %}
+    <li class="px-2 py-1 mt-auto text-white duration-300 rounded hover:bg-orange-500"
+        onclick="logout()">Logout</li>
+  </ul>
+</aside>
+<script>
+  async function logout() {
+    const response = await fetch("/demo/auth/logout", { method: "GET" });
+    if (response.ok) {
+      window.location.href = "/demo";
+    } else {
+      alert("Logout failed");
+    }
+  }
+
+  function navigateToService(serviceName) {
+    window.location.href = `/demo/page/${serviceName}`;
+  }
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    // 네비게이션 설정 (메뉴 렌더링)
+    const path = window.location.pathname;
+    const menuItems = document.querySelectorAll("#menu li");
+
+    menuItems.forEach((item) => {
+      const dataValue = item.getAttribute("data-value");
+      if (path.split("/").pop() === dataValue) {
+        item.classList.add("text-orange-400", "bg-orange-50");
+        item.classList.remove("hover:bg-orange-500", "text-white");
+      } else {
+        item.classList.add("text-white", "hover:bg-orange-500");
+        item.classList.remove("text-orange-400", "bg-orange-50");
+      }
+    });
+  });
+</script>

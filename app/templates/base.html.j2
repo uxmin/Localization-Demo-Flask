@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "components/header.html.j2" %}
+    <title>Artipen Demo</title>
+    <meta name="description" content="A demo for Artipen application">
+    <meta name="keywords" content="artipen, demo, application">
+  </head>
+  <body>
+    <div class="h-screen font-thin select-none text-sky-950">
+      <div class="flex h-full">
+        {% include "components/nav.html.j2" %}
+        <div class="flex-1 overflow-y-auto">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

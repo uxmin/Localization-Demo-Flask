@@ -1,0 +1,33 @@
+services:
+  artipen-demo:
+    image: artipen-demo:prod
+    container_name: artipen-demo
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - .:/src
+    env_file: .env
+    ports:
+      - ${PORT}:8000
+    networks:
+      - shared
+    depends_on:
+      - artipen-demo-redis
+
+  artipen-demo-redis:
+    image: redis:7.2-alpine
+    container_name: artipen-demo-redis
+    restart: unless-stopped
+    volumes:
+      - artipen-demo-data:/data
+    ports:
+      - 6379:6379
+
+networks:
+  shared:
+    external: true
+
+volumes:
+  artipen-demo-data:

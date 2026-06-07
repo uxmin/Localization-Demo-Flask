@@ -1,0 +1,74 @@
+{% extends "base.html.j2" %}
+{% block content %}
+  <div class="flex flex-col p-10">
+    <div name="service">
+      <header>
+        <h1 class="text-2xl font-medium tracking-tighter text-sky-800">Service</h1>
+        <p class="mt-1 font-extralight">서비스 목록을 확인할 수 있습니다.</p>
+      </header>
+      <div class="mt-4 flex max-h-[40vh] flex-wrap gap-4 overflow-y-auto rounded-lg bg-stone-100 p-4">
+        {% for service in services %}
+          <section class="0 w-[calc(50%-8px)] rounded-lg border border-l-8 p-4 shadow duration-300 hover:border-l-orange-400 bg-white cursor-pointer hover:text-black"
+                   onclick="navigateToService('{{ service.action }}')"
+                   name="card">
+            <header class="pb-2 mb-2 border-b">
+              <h3>{{ service.name }}</h3>
+              <p class="text-xs">{{ service.namek }}</p>
+            </header>
+            <p class="text-sm">{{ service.summary }}</p>
+          </section>
+        {% endfor %}
+      </div>
+    </div>
+    <hr class="my-10" />
+    <div name="playground" class="flex flex-row gap-4">
+      <div class="w-1/4 border-r">
+        <header>
+          <h1 class="text-2xl font-medium tracking-tighter text-sky-800">Notice</h1>
+          <p class="mt-1 font-extralight">
+            개발팀을 찾지 마십시오... 농담입니다... :)
+            <br />
+            해당 페이지 언제든 없어질 수 있음 주의.
+          </p>
+        </header>
+      </div>
+      <div class="flex-1">
+        <header>
+          <h1 class="text-xl font-medium tracking-tighter text-sky-800">Restaurants</h1>
+          <p class="mt-1 font-extralight">
+            There is no love sincerer than the love of food. - George Bernard Shaw
+            <br />
+            음식에 대한 사랑보다 더 진실한 사랑은 없다. - 조지 버나드 쇼
+          </p>
+        </header>
+        <section name="action" class="flex flex-row-reverse mb-4">
+          <button id="addbtn"
+                  class="px-4 py-2 text-white duration-300 bg-orange-400 rounded-lg hover:bg-orange-500">Add</button>
+        </section>
+        <section class="p-4 rounded-lg bg-stone-100 h-[40vh] overflow-y-auto space-y-2">
+          {% for restaurant in restaurants %}
+            <div class="flex w-full px-4 py-2 duration-300 bg-white rounded-lg hover:border-l-orange-400 hover:border-l-8">
+              <div class="flex flex-1 gap-4 cursor-pointer"
+                   onclick="openLinkInNewTab(this)">
+                <h1 class="pr-4 border-r">{{ restaurant.name }}</h1>
+                <p>{{ restaurant.description }}</p>
+              </div>
+              <button onclick="deleteRestaurant(this)">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1"
+                     stroke="currentColor"
+                     class="size-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z" />
+                </svg>
+              </button>
+              <a href="{{ restaurant.link }}" target="_blank" class="hidden-link"></a>
+            </div>
+          {% endfor %}
+        </section>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock content %}

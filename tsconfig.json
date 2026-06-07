@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "outDir": "app/static/js",   // 빌드된 JS 파일 저장 위치
+        "rootDir": "app/static/ts",        // 원본 .ts 파일 경로
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowJs": false,
+        "noEmitOnError": true,
+        "skipLibCheck": true
+    },
+    "include": ["app/static/ts/**/*"],
+    "exclude": ["node_modules", "app/static/js"]
+}

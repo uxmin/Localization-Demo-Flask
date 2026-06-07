@@ -1,0 +1,238 @@
+{% extends "service/base.html.j2" %}
+{% block notice %}
+{% endblock notice %}
+{% block subContent %}
+  <div class="flex-1 space-y-6" name="workspace">
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">1</h1>
+        <h2 class="font-light">Github 저장소 확인</h2>
+        <p class="text-sm text-sky-800">
+          탐색할 Github 저장소의 링크, 작업할 브랜치, 작업 폴더를 입력하세요.
+          <br />
+          Check Repository 버튼을 누르면 해당 작업 폴더가 저장소에 게시되어 있는지 확인할 수 있습니다.
+          <br />
+          입력하지 않고 버튼을 누르면 예시로 작성된 저장소로 연결됩니다.
+        </p>
+      </div>
+      <div class="mt-6">
+        <div class="flex gap-4">
+          <div class="flex-1">
+            <label for="repo_url" class="block mb-2 text-sm font-normal">Repository URL</label>
+            <input type="text"
+                   id="repo_url"
+                   class="w-full px-2 py-1 duration-300 rounded bg-stone-100 focus:outline-none focus:ring-1 focus:ring-sky-400"
+                   placeholder="https://github.com/owner/repo.git"
+                   required />
+          </div>
+          <div class="flex-1">
+            <label for="branch" class="block mb-2 text-sm font-normal">Branch</label>
+            <input type="text"
+                   id="branch"
+                   class="w-full px-2 py-1 duration-300 rounded bg-stone-100 focus:outline-none focus:ring-1 focus:ring-sky-400"
+                   placeholder="develop"
+                   required />
+          </div>
+        </div>
+        <div class="mt-4 mb-6">
+          <label for="path" class="block mb-2 text-sm font-normal">Path to Check</label>
+          <input type="text"
+                 id="path"
+                 class="w-full px-2 py-1 duration-300 rounded bg-stone-100 focus:outline-none focus:ring-1 focus:ring-sky-400"
+                 placeholder="/workspace"
+                 required />
+        </div>
+        <button id="chkRepo"
+                class="px-4 py-2 text-white duration-300 rounded-lg bg-sky-500 hover:bg-sky-400">
+          Check Repository
+        </button>
+      </div>
+    </section>
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card"
+             id="chkRepoSection">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">2</h1>
+        <h2 class="font-light">저장소의 폴더 확인</h2>
+        <p class="text-sm text-sky-800">
+          Check Repository로 조회한 폴더를 확인합니다.
+          <br />
+          폴더가 조회되지 않으면 업로드가 필요합니다.
+        </p>
+      </div>
+      <div class="mt-6">
+        <div class="flex items-center px-4 py-2 rounded-lg data-found bg-stone-100">
+          <div class="flex-none">
+            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 4a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V4z" />
+            </svg>
+          </div>
+          <div class="grow">
+            <p class="data-text">Not Found Yet</p>
+          </div>
+          <button id="dwnXlsx"
+                  class="hidden px-4 py-2 text-white duration-300 rounded-lg bg-sky-500 hover:bg-sky-400">
+            Download Xlsx
+          </button>
+        </div>
+        <div class="flex items-center justify-center hidden w-full mt-4 upload-form">
+          <label for="dropzone-file"
+                 class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                   aria-hidden="true"
+                   xmlns="http://www.w3.org/2000/svg"
+                   fill="none"
+                   viewBox="0 0 20 16">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+              </svg>
+              <p class="mb-2 text-sm text-gray-500">
+                <span class="font-semibold">Click to upload</span> or drag and drop
+              </p>
+              <p class="text-xs text-gray-500">ZIP</p>
+            </div>
+            <input id="dropzone-file" type="file" class="hidden" accept=".zip" />
+          </label>
+        </div>
+      </div>
+    </section>
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow pointer-events-none rounded-xl hover:border-l-orange-400 opacity-60"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">3</h1>
+        <h2 class="font-light">데이터 전처리 (선택 사항)</h2>
+        <p class="text-sm text-sky-800">
+          작업 폴더에 대해 전처리 과정을 실행할 수 있습니다.
+          <br />
+          이 과정은 시간이 소요되며, 진행 중에는 progress bar가 표시되어 상태를 확인할 수 있습니다.
+        </p>
+      </div>
+      <div class="mt-6">
+        <div class="flex items-center px-4 py-2 rounded-lg bg-stone-100">
+          <div class="grow">
+            <p>데이터 검증</p>
+            <p class="text-sm">파일 형식과 구조를 검증합니다.</p>
+          </div>
+          <div class="flex-none">
+            <button class="px-4 py-2 text-white duration-300 rounded-lg cursor-not-allowed bg-sky-500 hover:bg-sky-400">
+              Run
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center px-4 py-2 mt-4 rounded-lg bg-stone-100">
+          <div class="grow">
+            <p>데이터 정제</p>
+            <p class="text-sm">중복을 제거하고 데이터를 표준화합니다.</p>
+          </div>
+          <div class="flex-none">
+            <button class="px-4 py-2 text-white duration-300 rounded-lg cursor-not-allowed bg-sky-500 hover:bg-sky-400">
+              Run
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">4</h1>
+        <h2 class="font-light">작업 진행 현황 및 커밋 이력</h2>
+        <p class="text-sm text-sky-800">
+          작업 폴더의 작업 파일 수, 작업 및 검수 진행 건수를 확인할 수 있습니다.
+          <br />
+          또한 간단한 커밋 이력을 통해 작업자의 현황도 파악할 수 있습니다.
+        </p>
+      </div>
+      <div class="flex gap-4 mt-6">
+        <div class="flex-1 p-4 border rounded-lg">
+          <p class="font-normal text-sky-700">Progress Statistics</p>
+          <div class="h-64 mt-4" id="progress-section">
+            <div class="mb-6">
+              <div class="flex justify-between mb-1">
+                <span class="text-base font-normal">Files Completed</span>
+                <span id="progress-completed-text" class="text-sm font-normal">0 / 0</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progress-bar"
+                     class="bg-sky-500 h-2.5 rounded-full"
+                     style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <p class="grow">Files Worked</p>
+              <p id="progress-worked" class="flex-none">0</p>
+            </div>
+            <div class="flex items-center">
+              <p class="grow">Files Reviewed</p>
+              <p id="progress-reviewed" class="flex-none">0</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 p-4 border rounded-lg">
+          <p class="font-normal text-sky-700">Recent Commits</p>
+          <div class="h-64 mt-4 overflow-y-auto" id="commits-section">
+            <p class="text-center text-stone-300">Not Found Yet</p>
+          </div>
+        </div>
+        <button id="reload"
+                class="px-4 py-2 duration-300 rounded-lg bg-stone-100 hover:bg-stone-50">↻</button>
+      </div>
+    </section>
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">5</h1>
+        <h2 class="font-light">작업 완료 파일 다운로드</h2>
+        <p class="text-sm text-sky-800"></p>
+      </div>
+      <div class="flex gap-4 mt-6">
+        <div class="flex-1 p-4 border rounded-lg">
+          <p class="font-normal text-sky-700">Completed Work List</p>
+          <p class="mt-4 text-sm">작업과 검수가 완료된 파일을 zip 형식으로 추출해 납품할 수 있습니다. 또한, 이전에 납품한 파일 목록도 zip으로 압축해 다운로드할 수 있습니다.</p>
+          <div class="flex flex-col justify-center h-24">
+            <div class="flex items-center mb-4">
+              <input checked
+                     id="pending-data"
+                     type="radio"
+                     value=""
+                     name="download-data-type"
+                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2">
+              <label for="pending-data" class="text-sm ms-2">납품할 데이터 다운로드</label>
+            </div>
+            <div class="flex items-center">
+              <input id="delivered-data"
+                     type="radio"
+                     value=""
+                     name="download-data-type"
+                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2">
+              <label for="delivered-data" class="text-sm ms-2">납품된 데이터 다운로드</label>
+            </div>
+          </div>
+          <button id="dwnWorkList"
+                  class="w-full px-4 py-2 text-white duration-300 rounded-lg bg-sky-500 hover:bg-sky-400">
+            Download Work List
+          </button>
+        </div>
+        <div class="flex-1 p-4 border rounded-lg">
+          <p class="font-normal text-sky-700">KPI Calculation Data</p>
+          <p class="mt-4 text-sm">
+            납품이 모두 완료된 데이터를 기준으로 KPI 산출 결과를 확인할 수 있습니다. 작업 파일의 정보, 변경자, 변경 내용, 변경 시간 등이 기록된 xlsx 파일을 추출합니다.
+          </p>
+          <div class="h-24"></div>
+          <button id="dwnKPI"
+                  class="w-full px-4 py-2 text-white duration-300 rounded-lg bg-sky-500 hover:bg-sky-400">
+            Download KPI Data
+          </button>
+        </div>
+      </section>
+      <section name="action">
+        <button id="dwnbtn"
+                class="px-4 py-2 text-white duration-300 bg-orange-400 rounded-lg hover:bg-orange-500">Submit</button>
+      </section>
+    </div>
+    <div class="flex-1" name="pannel"></div>
+    {% set js_file_name = current_service.replace('-', '_') %}
+    <script type="module"
+            src="{{ url_for('static', filename='js/' + js_file_name + '.js') }}"></script>
+  {% endblock subContent %}

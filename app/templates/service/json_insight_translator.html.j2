@@ -1,0 +1,67 @@
+{% extends "service/base.html.j2" %}
+{% block notice %}
+  <li>번역이 완료되기까지 시간이 조금 걸릴 수 있습니다. 잠시만 기다려 주세요.</li>
+{% endblock notice %}
+{% block subContent %}
+  <div class="flex-1 space-y-6" name="workspace">
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">1</h1>
+        <h2 class="font-light">작업을 진행할 데이터를 입력하세요.</h2>
+        <p class="text-sm text-sky-800">JSON 형식으로 입력하셔야 합니다.</p>
+      </div>
+      <div class="mt-6">
+        <textarea id="jsonInput"
+                  class="w-full p-4 text-sm duration-300 border rounded resize-none focus:outline-none focus:ring-1 focus:ring-sky-400"
+                  rows="5"></textarea>
+      </div>
+    </section>
+    <section class="max-h-[50vh] px-6 py-10 overflow-y-auto bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400 duration-300"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">2</h1>
+        <h2 class="font-light">입력한 데이터를 확인합니다.</h2>
+        <p class="text-sm text-sky-800">형식을 지키지 않으면 데이터가 조회되지 않습니다.</p>
+      </div>
+      <div class="mt-6">
+        <andypf-json-viewer id="jsonViewer" indent="2" expanded="true" theme="ia-light" show-toolbar="true" expand-icon-type="square" show-copy="true" show-data-types="false" show-size="false"></andypf-json-viewer>
+      </div>
+    </section>
+    <section name="action">
+      <button id="resultBtn"
+              class="px-4 py-2 text-white duration-300 bg-orange-400 rounded-lg hover:bg-orange-500">Submit</button>
+    </section>
+  </div>
+  <div class="flex-1" name="pannel">
+    <section class="px-6 pb-10">
+      <ul class="flex flex-wrap font-light tracking-tighter border-b">
+        <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg border-t-sky-500"
+            data-target="result">
+          Result
+          <span class="text-xs text-stone-500">번역 결과를 제공합니다.</span>
+        </li>
+        <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg cursor-pointer hover:border-t-sky-200"
+            data-target="log">
+          Infomation
+          <span class="text-xs text-stone-500">분석된 정보를 제공합니다.</span>
+        </li>
+      </ul>
+      <div name="result"
+           class="px-6 py-10 rounded-bl-lg rounded-br-lg shadow bg-stone-100 max-h-[75vh] overflow-y-auto">
+        <andypf-json-viewer id="jsonResult" indent="2" expanded="true" theme="ia-light" show-toolbar="true" expand-icon-type="square" show-copy="true" show-data-types="false" show-size="false"></andypf-json-viewer>
+      </div>
+      <div name="log"
+           class="p-6 rounded-bl-lg rounded-br-lg shadow bg-stone-100"
+           hidden>
+        <textarea id="analyze"
+                  class="w-full p-4 text-sm resize-none bg-stone-50"
+                  disabled
+                  rows="20"></textarea>
+      </div>
+    </section>
+  </div>
+  {% set js_file_name = current_service.replace('-', '_') %}
+  <script type="module"
+          src="{{ url_for('static', filename='js/' + js_file_name + '.js') }}"></script>
+{% endblock subContent %}

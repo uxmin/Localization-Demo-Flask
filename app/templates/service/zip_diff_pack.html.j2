@@ -1,0 +1,122 @@
+{% extends "service/base.html.j2" %}
+{% block notice %}
+  <li>추출되는 파일 형식 변경이 필요하신 경우, 개발팀에 연락해 주시기 바랍니다.</li>
+{% endblock notice %}
+{% block subContent %}
+  <div class="flex-1 space-y-6" name="workspace">
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">1</h1>
+        <h2 class="font-light">작업 대상 원본 ZIP 파일을 업로드하세요.</h2>
+        <br />
+        <p class="text-sm text-sky-800">업로드하는 ZIP 파일은 하나의 루트 폴더(예: ko-KR)를 포함하고 있어야 하며, 이 폴더 내부에 번역 대상 파일들이 존재해야 합니다.</p>
+      </div>
+      <div class="mt-6">
+        <input type="file"
+               name="origin_file"
+               accept=".zip"
+               class="w-full rounded bg-stone-100 file:mr-3 file:border-none file:bg-sky-500 file:px-2 file:py-1 file:text-white file:duration-300 hover:file:bg-sky-400" />
+      </div>
+    </section>
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">2</h1>
+        <h2 class="font-light">작업한 ZIP 파일을 업로드하세요.</h2>
+        <br />
+        <p class="text-sm text-sky-800">
+          작업 완료 후 다시 압축한 ZIP 파일은 원본과 동일한 폴더 구조를 유지해야 합니다.
+          <br />
+          예를 들어, 원본 ZIP의 루트가 ko-KR이라면, 완료된 ZIP 파일도 압축 해제 시 ko-KR/... 형태여야 합니다.
+        </p>
+        <br />
+        <p class="text-sm text-sky-800">&#128680; 루트 폴더명 및 경로가 변경되면 정상적으로 비교가 되지 않을 수 있습니다.</p>
+      </div>
+      <div class="mt-6">
+        <input type="file"
+               name="work_file"
+               accept=".zip"
+               class="w-full rounded bg-stone-100 file:mr-3 file:border-none file:bg-sky-500 file:px-2 file:py-1 file:text-white file:duration-300 hover:file:bg-sky-400" />
+      </div>
+    </section>
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card"
+             aria-label="3">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">3</h1>
+        <h2 class="font-light">집계할 KEY를 선택하세요.</h2>
+        <br />
+        <p class="text-sm text-sky-800">선택한 KEY는 우측의 Result 항목에서 확인할 수 있으며, 최대 10개까지 선택할 수 있습니다.</p>
+        <p class="text-sm text-sky-800">KEY 리스트는 작업 대상 원본 ZIP 파일에 따라 달라집니다.</p>
+      </div>
+      <div class="mt-6">
+        <select class="w-full px-2 py-1 rounded outline-none bg-stone-100"
+                data-placeholder="Enter or search a key.">
+          <option hidden>선택</option>
+        </select>
+      </div>
+    </section>
+    <section name="action">
+      <button id="actionBtn"
+              class="px-4 py-2 text-white duration-300 bg-orange-400 rounded-lg hover:bg-orange-500">Submit</button>
+      <label class="px-4 text-sm text-stone-600">
+        <input id="downloadCheckbox"
+               type="checkbox"
+               class="checked:bg-sky-500 checked:border-0">
+        &nbsp;Download the file
+      </label>
+    </section>
+  </div>
+  <div class="flex-1" name="pannel">
+    <section class="px-6 pb-10 h-1/2">
+      <ul class="flex flex-wrap font-light tracking-tighter border-b">
+        <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg border-t-sky-500"
+            data-target="result">
+          Result
+          <span class="text-xs text-stone-500">변경된 사항에 대한 작업량을 산출합니다.</span>
+        </li>
+        <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg cursor-pointer hover:border-t-sky-200"
+            data-target="log">
+          Fail List
+          <span class="text-xs text-stone-500">변경되지 못한 파일 리스트를 조회합니다.</span>
+        </li>
+      </ul>
+      <div name="result"
+           class="px-6 py-10 rounded-bl-lg rounded-br-lg shadow bg-stone-100">
+        <p class="pb-4 text-right">
+          전체 파일 <span id="total">0</span>개 중 <span id="success">0</span>개 성공 (실패: <span id="fail">0</span>개)
+        </p>
+        <table class="w-full table-auto">
+          <thead>
+            <tr class="bg-stone-200">
+              <th class="px-2 font-normal text-left">Item</th>
+              <th class="px-2 font-normal text-right">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b-2">
+              <td class="px-2">etc</td>
+              <td class="px-2 text-right" id="etc">0</td>
+            </tr>
+            <tr>
+              <td class="px-2">total</td>
+              <td class="px-2 text-right" id="totalCnt">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div name="log"
+           class="p-6 rounded-bl-lg rounded-br-lg shadow bg-stone-100"
+           hidden>
+        <textarea id="failList"
+                  class="w-full p-4 text-sm resize-none bg-stone-50"
+                  disabled
+                  rows="10"></textarea>
+      </div>
+    </section>
+  </div>
+  {% set js_file_name = current_service.replace('-', '_') %}
+  <script type="module"
+          src="{{ url_for('static', filename='js/' + js_file_name + '.js') }}"></script>
+{% endblock subContent %}

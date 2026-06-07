@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Sample Restaurant A",
+    "description": "한식 - 예시 데이터",
+    "link": "https://example.com/restaurant-a"
+  },
+  {
+    "name": "Sample Restaurant B",
+    "description": "분식 - 예시 데이터",
+    "link": "https://example.com/restaurant-b"
+  }
+]

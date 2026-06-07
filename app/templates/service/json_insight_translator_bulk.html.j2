@@ -1,0 +1,64 @@
+{% extends "service/base.html.j2" %}
+{% block notice %}
+  <li>번역을 완료하는 데 시간이 소요됩니다. 기다려주세요.</li>
+{% endblock notice %}
+{% block subContent %}
+  <div class="flex-1 space-y-6" name="workspace">
+    <section class="px-6 py-10 duration-300 bg-white border border-l-8 shadow rounded-xl hover:border-l-orange-400"
+             name="card">
+      <div>
+        <h1 class="text-2xl font-medium opacity-50">1</h1>
+        <h2 class="font-light">압축 파일을 업로드하세요.</h2>
+        <p class="text-sm text-sky-800">현재는 zip 파일만 지원됩니다.</p>
+      </div>
+      <div class="mt-6">
+        <input type="file"
+               name="zip_file"
+               accept=".zip"
+               class="w-full rounded bg-stone-100 file:mr-3 file:border-none file:bg-sky-500 file:px-2 file:py-1 file:text-white file:duration-300 hover:file:bg-sky-400" />
+      </div>
+    </section>
+    <section name="action">
+      <button id="chkbtn"
+              class="px-4 py-2 text-white duration-300 bg-orange-400 rounded-lg hover:bg-orange-500">Check</button>
+    </section>
+  </div>
+  <div class="flex-1" name="pannel">
+    <section class="px-6 pb-10">
+      <ul class="flex flex-wrap font-light tracking-tighter border-b">
+        <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg border-t-sky-500"
+            data-target="result">
+          Result
+          <span class="text-xs text-stone-500">번역 상태를 제공합니다.</span>
+        </li>
+        <li class="flex items-center flex-1 gap-4 px-6 py-2 duration-300 border-t-4 border-l border-r rounded-tl-lg rounded-tr-lg cursor-pointer hover:border-t-sky-200"
+            data-target="log">
+          Infomation
+          <span class="text-xs text-stone-500">분석된 정보를 제공합니다.</span>
+        </li>
+      </ul>
+      <div name="result"
+           class="px-6 py-10 rounded-bl-lg rounded-br-lg shadow bg-stone-100 max-h-[75vh] overflow-y-auto">
+        <div name="progressBar" class="w-full h-6 bg-gray-200 rounded-full">
+          <div class="h-6 rounded-full bg-sky-500" style="width: 0%"></div>
+        </div>
+        <div name="progressStatus" class="flex flex-row gap-2">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <div name="log"
+           class="p-6 rounded-bl-lg rounded-br-lg shadow bg-stone-100"
+           hidden>
+        <textarea id="analyze"
+                  class="w-full p-4 text-sm resize-none bg-stone-50"
+                  disabled
+                  rows="20"></textarea>
+      </div>
+    </section>
+  </div>
+  {% set js_file_name = current_service.replace('-', '_') %}
+  <script type="module"
+          src="{{ url_for('static', filename='js/' + js_file_name + '.js') }}"></script>
+{% endblock subContent %}
